@@ -54,7 +54,8 @@ export default function CreatePostForm({ onPostCreated }: CreatePostFormProps) {
 
         if (imageResponse.ok) {
           const imageData = await imageResponse.json()
-          imageUrl = imageData.url
+          // Use assetId for Sanity reference
+          imageUrl = imageData.assetId || imageData.url
         }
       }
 
