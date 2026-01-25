@@ -15,6 +15,6 @@ export interface Post {
 }
 
 // Re-export Sanity functions
-export const getAllPosts = sanityGetAllPosts
-export const getPostBySlug = sanityGetPostBySlug
-export const getPostsByCategory = sanityGetPostsByCategory
+export const getAllPosts: () => Promise<Post[]> = sanityGetAllPosts
+export const getPostBySlug: (slug: string) => Promise<Post | undefined> = sanityGetPostBySlug
+export const getPostsByCategory: (category: PostCategory) => Promise<Post[]> = sanityGetPostsByCategory
