@@ -17,6 +17,8 @@ export default function CreatePostForm({ onPostCreated }: CreatePostFormProps) {
   const [bannerImage, setBannerImage] = useState<File | null>(null)
   const [bannerPreview, setBannerPreview] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [password, setPassword] = useState('')
+  const [passwordError, setPasswordError] = useState('')
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -68,6 +70,7 @@ export default function CreatePostForm({ onPostCreated }: CreatePostFormProps) {
         excerpt: content.trim().substring(0, 150) + (content.length > 150 ? '...' : ''),
         author: author,
         publishedAt: new Date().toISOString().split('T')[0],
+        password: password.trim(),
       }
 
       const response = await fetch('/api/posts', {
@@ -82,12 +85,18 @@ export default function CreatePostForm({ onPostCreated }: CreatePostFormProps) {
         // Reset form
         setTitle('')
         setContent('')
+        setPassword('')
         setBannerImage(null)
         setBannerPreview(null)
         setIsOpen(false)
         onPostCreated()
       } else {
-        alert('Failed to create post')
+        const errorData = await response.json()
+        if (response.status === 401) {
+          setPasswordError(errorData.error || 'Incorrect password')
+        } else {
+          alert(errorData.error || 'Failed to create post')
+        }
       }
     } catch (error) {
       console.error('Error creating post:', error)
@@ -128,7 +137,11 @@ export default function CreatePostForm({ onPostCreated }: CreatePostFormProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              setIsOpen(false)
+              setPassword('')
+              setPasswordError('')
+            }}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -140,7 +153,11 @@ export default function CreatePostForm({ onPostCreated }: CreatePostFormProps) {
               <div className="sticky top-0 bg-gradient-to-r from-primary-600 to-purple-600 px-6 py-5 flex justify-between items-center z-10">
                 <h2 className="text-2xl font-bold text-white">Create New Post</h2>
                 <motion.button
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    setIsOpen(false)
+                    setPassword('')
+                    setPasswordError('')
+                  }}
                   className="text-white hover:text-gray-200 transition p-2 rounded-full hover:bg-white/20"
                   whileHover={{ rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
@@ -244,10 +261,47 @@ export default function CreatePostForm({ onPostCreated }: CreatePostFormProps) {
                   />
                 </motion.div>
 
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Password <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value)
+                      setPasswordError('')
+                    }}
+                    className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all ${
+                      passwordError ? 'border-red-500' : 'border-gray-200'
+                    }`}
+                    placeholder="Enter password to create post..."
+                    required
+                  />
+                  {passwordError && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-2 text-sm text-red-600 font-medium"
+                    >
+                      {passwordError}
+                    </motion.p>
+                  )}
+                </motion.div>
+
                 <div className="flex justify-end gap-4 pt-4 border-t border-gray-200">
                   <motion.button
                     type="button"
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => {
+                      setIsOpen(false)
+                      setPassword('')
+                      setPasswordError('')
+                    }}
                     className="px-6 py-3 border-2 border-gray-300 rounded-xl text-gray-700 font-semibold hover:bg-gray-50 transition-colors"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}

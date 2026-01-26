@@ -24,8 +24,21 @@ export async function POST(request: NextRequest) {
       filename: file.name,
     })
 
+    if (!asset) {
+      return NextResponse.json({ error: 'Failed to upload asset' }, { status: 500 })
+    }
+
     // Get the URL for the uploaded image
-    const imageUrl = urlFor(asset).url()
+    const imageBuilder = urlFor(asset)
+    if (!imageBuilder) {
+      return NextResponse.json({ error: 'Failed to create image builder' }, { status: 500 })
+    }
+    
+    const imageUrl = imageBuilder.url()
+
+    if (!imageUrl) {
+      return NextResponse.json({ error: 'Failed to generate image URL' }, { status: 500 })
+    }
 
     return NextResponse.json({ 
       url: imageUrl, 

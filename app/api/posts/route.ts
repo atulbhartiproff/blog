@@ -24,7 +24,17 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { title, category, content, image, excerpt } = body
+    const { title, category, content, image, excerpt, password } = body
+
+    // Validate password
+    const correctPassword = process.env.POST_CREATION_PASSWORD
+    if (!correctPassword) {
+      return NextResponse.json({ error: 'Password protection is not configured on the server' }, { status: 500 })
+    }
+
+    if (!password || password !== correctPassword) {
+      return NextResponse.json({ error: 'Incorrect password' }, { status: 401 })
+    }
 
     // Generate slug from title
     const baseSlug = title

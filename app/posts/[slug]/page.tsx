@@ -51,14 +51,25 @@ export default async function PostPage({ params }: { params: { slug: string } })
           </h1>
         </div>
 
-        {post.image && (
+        {post.image ? (
           <div className="relative h-64 md:h-96 bg-gray-200">
             <Image
               src={post.image}
               alt={post.title}
               fill
               className="object-cover"
+              unoptimized
             />
+          </div>
+        ) : (
+          <div className="relative h-64 md:h-96 bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
+            <div className="text-white text-6xl opacity-50">
+              {post.category === 'album' && '🎵'}
+              {post.category === 'game' && '🎮'}
+              {post.category === 'book' && '📚'}
+              {post.category === 'film' && '🎬'}
+              {post.category === 'essay' && '✍️'}
+            </div>
           </div>
         )}
         
