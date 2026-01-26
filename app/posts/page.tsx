@@ -2,6 +2,9 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { getAllPosts, type PostCategory } from '@/data/posts'
 
+// Revalidate every 60 seconds to pick up new posts from Sanity
+export const revalidate = 60
+
 const categoryColors: Record<PostCategory, string> = {
   album: 'bg-purple-100 text-purple-800',
   game: 'bg-blue-100 text-blue-800',

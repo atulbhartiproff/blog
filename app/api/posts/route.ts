@@ -8,7 +8,11 @@ export async function GET() {
     console.log('API: Fetching posts from Sanity...')
     const posts = await getAllPosts()
     console.log('API: Fetched', posts.length, 'posts')
-    return NextResponse.json(posts)
+    return NextResponse.json(posts, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120',
+      },
+    })
   } catch (error) {
     console.error('API: Error fetching posts:', error)
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'

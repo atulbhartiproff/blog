@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { motion } from 'framer-motion'
@@ -30,6 +30,12 @@ interface PostListProps {
 
 export default function PostList({ initialPosts, selectedCategories }: PostListProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts)
+
+  // Auto-refresh posts every 60 seconds to pick up new posts from Sanity
+  useEffect(() => {
+    const interval = setInterval(refreshPosts, 60000)
+    return () => clearInterval(interval)
+  }, [])
 
   // Filter posts based on selected categories
   const filteredPosts = selectedCategories.size > 0

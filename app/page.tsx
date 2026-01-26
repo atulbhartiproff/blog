@@ -1,6 +1,9 @@
 import { getAllPosts } from '@/data/posts'
 import HomeContent from './components/HomeContent'
 
+// Revalidate every 60 seconds to pick up new posts from Sanity
+export const revalidate = 60
+
 export default async function Home() {
   try {
     const posts = await getAllPosts()
