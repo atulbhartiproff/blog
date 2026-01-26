@@ -12,16 +12,16 @@ export default function GlitchIntro({ onComplete }: { onComplete: () => void }) 
     // Stop glitching after 3 seconds
     const stopGlitch = setTimeout(() => {
       setIsGlitching(false)
-    }, 3000)
+    }, 1000)
 
-    // Fade out and complete after 5 seconds total
+    // Fade out and complete after 2 seconds total
     const completeTimeout = setTimeout(() => {
       setIsVisible(false)
       // Wait for fade out animation to complete before calling onComplete
       setTimeout(() => {
         onComplete()
       }, 500) // Match the fade out duration
-    }, 5000)
+    }, 2000)
 
     return () => {
       clearTimeout(stopGlitch)

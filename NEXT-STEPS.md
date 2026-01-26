@@ -68,3 +68,4 @@ SANITY_API_TOKEN=your-api-token-here
 
 Your blog is now fully integrated with Sanity CMS!
 
+

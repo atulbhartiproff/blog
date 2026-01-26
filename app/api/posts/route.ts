@@ -5,11 +5,14 @@ import { author } from '@/data/author'
 
 export async function GET() {
   try {
+    console.log('API: Fetching posts from Sanity...')
     const posts = await getAllPosts()
+    console.log('API: Fetched', posts.length, 'posts')
     return NextResponse.json(posts)
   } catch (error) {
-    console.error('Error fetching posts:', error)
-    return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 })
+    console.error('API: Error fetching posts:', error)
+    console.error('API: Error details:', error.message)
+    return NextResponse.json({ error: 'Failed to fetch posts', details: error.message }, { status: 500 })
   }
 }
 
