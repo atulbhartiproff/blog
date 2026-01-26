@@ -11,8 +11,9 @@ export async function GET() {
     return NextResponse.json(posts)
   } catch (error) {
     console.error('API: Error fetching posts:', error)
-    console.error('API: Error details:', error.message)
-    return NextResponse.json({ error: 'Failed to fetch posts', details: error.message }, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error('API: Error details:', errorMessage)
+    return NextResponse.json({ error: 'Failed to fetch posts', details: errorMessage }, { status: 500 })
   }
 }
 
