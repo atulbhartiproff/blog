@@ -2,13 +2,22 @@ import { notFound } from 'next/navigation'
 import { format } from 'date-fns'
 import { getPostBySlug, getAllPosts, type PostCategory } from '@/data/posts'
 import Image from 'next/image'
+import { useTheme } from '@/app/components/ThemeContext'
 
-const categoryColors: Record<PostCategory, string> = {
+const categoryColorsLight: Record<PostCategory, string> = {
   album: 'bg-purple-100 text-purple-800',
   game: 'bg-blue-100 text-blue-800',
   book: 'bg-green-100 text-green-800',
   film: 'bg-red-100 text-red-800',
   essay: 'bg-yellow-100 text-yellow-800',
+}
+
+const categoryColorsDark: Record<PostCategory, string> = {
+  album: 'bg-lime-300/20 text-lime-200 border border-lime-400/70',
+  game: 'bg-lime-300/20 text-lime-200 border border-lime-400/70',
+  book: 'bg-lime-300/20 text-lime-200 border border-lime-400/70',
+  film: 'bg-lime-300/20 text-lime-200 border border-lime-400/70',
+  essay: 'bg-lime-300/20 text-lime-200 border border-lime-400/70',
 }
 
 const categoryLabels: Record<PostCategory, string> = {
@@ -33,12 +42,17 @@ export default async function PostPage({ params }: { params: { slug: string } })
     notFound()
   }
 
+  // Note: PostPage is a server component, so it can't call useTheme directly.
+  // We style the shell neutrally; the ThemeProvider in layout already applies
+  // the global dark background and text, and components inside can use useTheme
+  // if needed via a separate client wrapper.
+
   return (
-    <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="p-8 md:p-12 pb-6">
-          <div className="flex items-center justify-between mb-6">
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${categoryColors[post.category]}`}>
+    <article className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md dark:border-lime-500/40 dark:bg-black/80">
+        <div className="pb-6 p-8 md:p-12">
+          <div className="mb-6 flex items-center justify-between">
+            <span className="px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
               {categoryLabels[post.category]}
             </span>
             <time className="text-sm text-gray-500">
@@ -46,13 +60,13 @@ export default async function PostPage({ params }: { params: { slug: string } })
             </time>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h1 className="mb-6 text-4xl font-bold text-gray-900 md:text-5xl">
             {post.title}
           </h1>
         </div>
 
         {post.image ? (
-          <div className="relative h-64 md:h-96 bg-gray-200">
+          <div className="relative h-64 bg-gray-200 md:h-96">
             <Image
               src={post.image}
               alt={post.title}
@@ -62,8 +76,8 @@ export default async function PostPage({ params }: { params: { slug: string } })
             />
           </div>
         ) : (
-          <div className="relative h-64 md:h-96 bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
-            <div className="text-white text-6xl opacity-50">
+          <div className="relative flex h-64 items-center justify-center bg-gradient-to-br from-primary-500 to-purple-600 md:h-96">
+            <div className="text-6xl text-white opacity-50">
               {post.category === 'album' && '🎵'}
               {post.category === 'game' && '🎮'}
               {post.category === 'book' && '📚'}
@@ -75,10 +89,10 @@ export default async function PostPage({ params }: { params: { slug: string } })
         
         <div className="p-8 md:p-12">
 
-          <div className="flex items-center gap-4 mb-8 pb-8 border-b">
+          <div className="mb-8 flex items-center gap-4 border-b pb-8">
             <div className="flex items-center gap-3">
               {post.author.image && (
-                <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                <div className="relative h-10 w-10 overflow-hidden rounded-full">
                   <Image
                     src={post.author.image}
                     alt={post.author.name}
@@ -88,7 +102,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
                 </div>
               )}
               <div>
-                <p className="font-medium text-gray-900">{post.author.name}</p>
+                <p className="font-medium text-gray-900"> {post.author.name}</p>
                 <p className="text-sm text-gray-500">Author</p>
               </div>
             </div>

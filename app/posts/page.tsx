@@ -25,17 +25,17 @@ export default async function PostsPage() {
   const posts = await getAllPosts()
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-4xl font-bold text-gray-900 mb-8">All Posts</h1>
+    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+      <h1 className="mb-8 text-4xl font-bold text-gray-900">All Posts</h1>
       
       <div className="space-y-6">
         {posts.map((post) => (
           <Link
             key={post.slug}
             href={`/posts/${post.slug}`}
-            className="block bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow duration-300"
+            className="block rounded-lg border border-gray-200 bg-white p-6 shadow-md transition-shadow duration-300 hover:shadow-xl"
           >
-            <div className="flex items-start justify-between mb-3">
+            <div className="mb-3 flex items-start justify-between">
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${categoryColors[post.category]}`}>
                 {categoryLabels[post.category]}
               </span>
@@ -43,10 +43,10 @@ export default async function PostsPage() {
                 {format(new Date(post.publishedAt), 'MMMM d, yyyy')}
               </span>
             </div>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-2 hover:text-primary-600 transition">
+            <h2 className="mb-2 text-2xl font-semibold text-gray-900 transition hover:text-primary-600">
               {post.title}
             </h2>
-            <p className="text-gray-600 mb-4">
+            <p className="mb-4 text-gray-600">
               {post.excerpt}
             </p>
             <div className="flex items-center text-sm text-gray-500">

@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { format } from 'date-fns'
 import { motion } from 'framer-motion'
 import type { Post, PostCategory } from '@/data/posts'
 import CreatePostForm from './CreatePostForm'
+import { useTheme } from './ThemeContext'
 
 const categoryColors: Record<PostCategory, string> = {
   album: 'bg-gradient-to-r from-purple-500 to-pink-500 text-white',
@@ -29,6 +31,8 @@ interface PostListProps {
 }
 
 export default function PostList({ initialPosts, selectedCategories }: PostListProps) {
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
   const [posts, setPosts] = useState<Post[]>(initialPosts)
 
   // Auto-refresh posts every 60 seconds to pick up new posts from Sanity
@@ -95,9 +99,13 @@ export default function PostList({ initialPosts, selectedCategories }: PostListP
               href={`/posts/${post.slug}`}
               className="block group"
             >
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
+              <div className={`h-full flex flex-col overflow-hidden rounded-2xl border transition-all duration-300 shadow-lg hover:shadow-2xl ${
+                isDark
+                  ? 'border-lime-500/40 bg-black/80'
+                  : 'border-gray-100 bg-white'
+              }`}>
                 {post.image ? (
-                  <div className="relative h-56 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+                  <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
                     <motion.img
                       src={post.image}
                       alt={post.title}
@@ -114,8 +122,10 @@ export default function PostList({ initialPosts, selectedCategories }: PostListP
                     </motion.span>
                   </div>
                 ) : (
-                  <div className="relative h-56 bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
-                    <div className="text-white text-6xl opacity-50">
+                  <div className={`relative flex h-56 items-center justify-center bg-gradient-to-br ${
+                    isDark ? 'from-lime-500 to-emerald-700' : 'from-primary-500 to-purple-600'
+                  }`}>
+                    <div className="text-6xl opacity-50 text-white">
                       {post.category === 'album' && '🎵'}
                       {post.category === 'game' && '🎮'}
                       {post.category === 'book' && '📚'}
@@ -128,30 +138,53 @@ export default function PostList({ initialPosts, selectedCategories }: PostListP
                   </div>
                 )}
                 
-                <div className="p-6 flex-1 flex flex-col">
-                  <div className="flex items-center justify-between mb-3">
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="mb-3 flex items-center justify-between">
                     <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${categoryColors[post.category]}`}>
                       {categoryLabels[post.category]}
                     </span>
-                    <span className="text-xs text-gray-500 font-medium">
+                    <span className={`text-xs font-medium ${
+                      isDark ? 'text-lime-200/70' : 'text-gray-500'
+                    }`}>
                       {format(new Date(post.publishedAt), 'MMM d, yyyy')}
                     </span>
                   </div>
                   
-                  <h2 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors line-clamp-2">
+                  <h2 className={`mb-3 line-clamp-2 text-2xl font-bold transition-colors group-hover:text-primary-600 ${
+                    isDark ? 'text-lime-100' : 'text-gray-900'
+                  }`}>
                     {post.title}
                   </h2>
                   
-                  <p className="text-gray-600 mb-4 line-clamp-3 flex-1 text-sm leading-relaxed">
+                  <p className={`mb-4 flex-1 text-sm leading-relaxed line-clamp-3 ${
+                    isDark ? 'text-lime-100/80' : 'text-gray-600'
+                  }`}>
                     {post.excerpt}
                   </p>
                   
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                  <div className={`flex items-center justify-between border-t pt-4 ${
+                    isDark ? 'border-lime-500/30' : 'border-gray-100'
+                  }`}>
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
-                        {post.author.name.charAt(0).toUpperCase()}
+                      <div className="relative h-8 w-8 overflow-hidden rounded-full">
+                        {post.author.image ? (
+                          <Image
+                            src={post.author.image}
+                            alt={post.author.name}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className={`flex h-full w-full items-center justify-center text-xs font-bold text-white bg-gradient-to-br ${
+                            isDark ? 'from-lime-500 to-emerald-600' : 'from-primary-400 to-purple-500'
+                          }`}>
+                            {post.author.name.charAt(0).toUpperCase()}
+                          </div>
+                        )}
                       </div>
-                      <span className="text-sm text-gray-600 font-medium">
+                      <span className={`text-sm font-medium ${
+                        isDark ? 'text-lime-100/90' : 'text-gray-600'
+                      }`}>
                         {post.author.name}
                       </span>
                     </div>
