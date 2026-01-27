@@ -26,7 +26,7 @@ export default async function PostsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="mb-8 text-4xl font-bold text-gray-900">All Posts</h1>
+      <h1 className="mb-8 text-4xl font-bold text-gray-900 dark:text-white">All Posts</h1>
       
       <div className="space-y-6">
         {posts.map((post) => (
@@ -43,10 +43,10 @@ export default async function PostsPage() {
                 {format(new Date(post.publishedAt), 'MMMM d, yyyy')}
               </span>
             </div>
-            <h2 className="mb-2 text-2xl font-semibold text-gray-900 transition hover:text-primary-600">
+            <h2 className="mb-2 text-2xl font-semibold text-gray-900 transition hover:text-primary-600 dark:text-white">
               {post.title}
             </h2>
-            <p className="mb-4 text-gray-600">
+            <p className="mb-4 text-gray-600 dark:text-gray-300">
               {post.excerpt}
             </p>
             <div className="flex items-center text-sm text-gray-500">

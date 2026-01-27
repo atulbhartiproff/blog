@@ -2,23 +2,6 @@ import { notFound } from 'next/navigation'
 import { format } from 'date-fns'
 import { getPostBySlug, getAllPosts, type PostCategory } from '@/data/posts'
 import Image from 'next/image'
-import { useTheme } from '@/app/components/ThemeContext'
-
-const categoryColorsLight: Record<PostCategory, string> = {
-  album: 'bg-purple-100 text-purple-800',
-  game: 'bg-blue-100 text-blue-800',
-  book: 'bg-green-100 text-green-800',
-  film: 'bg-red-100 text-red-800',
-  essay: 'bg-yellow-100 text-yellow-800',
-}
-
-const categoryColorsDark: Record<PostCategory, string> = {
-  album: 'bg-lime-300/20 text-lime-200 border border-lime-400/70',
-  game: 'bg-lime-300/20 text-lime-200 border border-lime-400/70',
-  book: 'bg-lime-300/20 text-lime-200 border border-lime-400/70',
-  film: 'bg-lime-300/20 text-lime-200 border border-lime-400/70',
-  essay: 'bg-lime-300/20 text-lime-200 border border-lime-400/70',
-}
 
 const categoryLabels: Record<PostCategory, string> = {
   album: 'Album',
@@ -50,17 +33,17 @@ export default async function PostPage({ params }: { params: { slug: string } })
   return (
     <article className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md dark:border-lime-500/40 dark:bg-black/80">
-        <div className="pb-6 p-8 md:p-12">
+        <div className="p-8 pb-6 md:p-12">
           <div className="mb-6 flex items-center justify-between">
-            <span className="px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+            <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-800 dark:bg-lime-300/20 dark:text-lime-200 dark:ring-1 dark:ring-lime-400/70">
               {categoryLabels[post.category]}
             </span>
-            <time className="text-sm text-gray-500">
+            <time className="text-sm text-gray-500 dark:text-lime-200/70">
               {format(new Date(post.publishedAt), 'MMMM d, yyyy')}
             </time>
           </div>
 
-          <h1 className="mb-6 text-4xl font-bold text-gray-900 md:text-5xl">
+          <h1 className="mb-6 text-4xl font-bold text-gray-900 dark:text-lime-100 md:text-5xl">
             {post.title}
           </h1>
         </div>
@@ -89,10 +72,10 @@ export default async function PostPage({ params }: { params: { slug: string } })
         
         <div className="p-8 md:p-12">
 
-          <div className="mb-8 flex items-center gap-4 border-b pb-8">
+          <div className="mb-8 flex items-center gap-4 border-b border-gray-200 pb-8 dark:border-lime-500/40">
             <div className="flex items-center gap-3">
               {post.author.image && (
-                <div className="relative h-10 w-10 overflow-hidden rounded-full">
+                <div className="relative h-10 w-10 overflow-hidden rounded-full ring-2 ring-primary-400 dark:ring-lime-400/80">
                   <Image
                     src={post.author.image}
                     alt={post.author.name}
@@ -102,8 +85,12 @@ export default async function PostPage({ params }: { params: { slug: string } })
                 </div>
               )}
               <div>
-                <p className="font-medium text-gray-900"> {post.author.name}</p>
-                <p className="text-sm text-gray-500">Author</p>
+                <p className="font-medium text-gray-900 dark:text-lime-100">
+                  {post.author.name}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-lime-200/70">
+                  Author
+                </p>
               </div>
             </div>
           </div>
