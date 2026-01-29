@@ -13,6 +13,7 @@ export default function About() {
                   src={author.image}
                   alt={author.name}
                   fill
+                  sizes="192px"
                   className="object-cover"
                 />
               </div>

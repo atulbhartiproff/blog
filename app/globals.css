@@ -3,12 +3,23 @@
 @tailwind utilities;
 
 @layer base {
+  /* Background controlled by ThemeContext + blocking script for overscroll and color-scheme */
   body {
-    @apply bg-gradient-to-br from-gray-50 via-white to-gray-50 text-gray-900;
+    @apply text-gray-900;
+    background-color: inherit;
   }
-  
+
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Dark theme base when data-theme is set (script + React sync) */
+  html[data-theme='dark'] {
+    color-scheme: dark;
+  }
+
+  html[data-theme='light'] {
+    color-scheme: light;
   }
 }
 

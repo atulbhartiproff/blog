@@ -54,6 +54,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
               src={post.image}
               alt={post.title}
               fill
+              sizes="(min-width: 896px) 896px, 100vw"
               className="object-cover"
               unoptimized
             />
@@ -80,6 +81,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
                     src={post.author.image}
                     alt={post.author.name}
                     fill
+                    sizes="40px"
                     className="object-cover"
                   />
                 </div>

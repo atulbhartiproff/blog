@@ -172,6 +172,7 @@ export default function PostList({ initialPosts, selectedCategories }: PostListP
                             src={post.author.image}
                             alt={post.author.name}
                             fill
+                            sizes="32px"
                             className="object-cover"
                           />
                         ) : (
