@@ -8,9 +8,6 @@ import SiteFooter from './components/SiteFooter'
 export const metadata: Metadata = {
   title: `${author.name}'s Blog`,
   description: author.bio,
-  icons: {
-    icon: '/favicon.ico',
-  },
 }
 
 export default function RootLayout({
